@@ -1,0 +1,23 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Local tooling (brainstorm companion state holds a session key)
+.superpowers/
+.playwright-mcp/
+
+# Private reference screenshots
+/image.png
+
+# Next.js (for the upcoming build)
+node_modules/
+.next/
+out/
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+
+# Env files (keep the example)
+.env*
+!.env.example
