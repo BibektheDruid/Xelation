@@ -6,12 +6,13 @@ Website for **XELATION**: wedding DJ & MC, private parties. [@its_xelation](http
 
 | Path | What it is |
 |---|---|
-| [`preview/index.html`](preview/index.html) | Clickable design preview of the full site: desktop and phone views, the design system, and a working (simulated) inquiry form. One self-contained HTML file. |
+| [`index.html`](index.html) | The site design: a self-contained page with the full layout and a working (simulated) inquiry form. Deployed at [xelation.vercel.app](https://xelation.vercel.app). |
 | [`docs/xelation-site-build-prompt.md`](docs/xelation-site-build-prompt.md) | The build brief: stack, design direction, page structure, package copy (word for word), inquiry form + Resend spec, and open items. |
 
-## View the preview
+## View it
 
-Open `preview/index.html` in any browser. The toolbar at the bottom switches between:
+- **Live:** [xelation.vercel.app](https://xelation.vercel.app) shows the site as a visitor sees it.
+- **Review mode:** [xelation.vercel.app/?preview](https://xelation.vercel.app/?preview) adds a toolbar at the bottom that switches between:
 
 - **Site / Components**: the full page, or the design-system sheet
 - **Desktop / Phone**: shows the site in a phone frame to check the mobile layout

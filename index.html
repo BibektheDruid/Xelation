@@ -3,11 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>XELATION Preview</title>
+<title>XELATION | Wedding DJ &amp; MC</title>
+<meta name="description" content="XELATION: wedding DJ &amp; MC and private parties. Great music, exceptional sound, and every moment handled from the ceremony to the last dance.">
+<meta name="theme-color" content="#0b0a09">
+<meta property="og:title" content="XELATION | Wedding DJ &amp; MC">
+<meta property="og:description" content="From the ceremony to the last dance. Packages from $1,800. Check your date.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230b0a09%27/%3E%3Cpath d=%27M18 16l28 32M46 16L18 48%27 stroke=%27%23d6b07a%27 stroke-width=%275%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
-<script>document.documentElement.classList.add('js')</script>
+<script>document.documentElement.classList.add('js');if(!/[?&]preview\b/.test(location.search))document.documentElement.classList.add('no-pv')</script>
 <style>
 :root{
   --stage:#0b0a09; --stage-2:#12100e; --stage-3:#191613; --raise:#1f1b17;
@@ -55,7 +61,7 @@ section[id]{scroll-margin-top:76px}
 .eyebrow{display:inline-flex;align-items:center;gap:14px;font-stretch:125%;font-weight:500;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin:0}
 .eyebrow.rule::before{content:"";width:30px;height:1px;background:currentColor;opacity:.7}
 .star{color:var(--gold);font-size:.8em;opacity:.9}
-.display{font-family:var(--serif);font-weight:400;letter-spacing:-.018em;line-height:1;margin:0;text-wrap:balance}
+.display{font-family:var(--serif);font-weight:400;font-optical-sizing:none;font-variation-settings:"opsz" 40;letter-spacing:-.015em;line-height:1;margin:0;text-wrap:balance}
 .display em{font-style:italic;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
 .h2{font-size:clamp(2.35rem,5.4cqi,4.5rem)}
 .lede{color:var(--ivory-2);font-size:clamp(16px,1.55cqi,19px);line-height:1.65;margin:0;max-width:36em;text-wrap:pretty}
@@ -66,6 +72,8 @@ section[id]{scroll-margin-top:76px}
 .btn .ic{font-size:15px;transition:transform .35s var(--ease)}
 .btn:hover .ic{transform:translateX(3px)}
 .btn-gold{background:var(--gold-grad);background-size:220% 100%;color:#1a1309;box-shadow:0 12px 32px -12px rgba(214,176,122,.6),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-gold::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%);transition:transform .9s var(--ease)}
+.btn-gold:hover::after{transform:translateX(120%)}
 .btn-gold:hover{background-position:100% 0;transform:translateY(-1px);box-shadow:0 18px 44px -14px rgba(214,176,122,.75),inset 0 1px 0 rgba(255,255,255,.5)}
 .btn-ghost{border:1px solid var(--line-2);background:rgba(239,231,218,.02);color:var(--ivory)}
 .btn-ghost:hover{border-color:rgba(214,176,122,.6);background:rgba(214,176,122,.07);color:var(--gold-hi)}
@@ -102,14 +110,17 @@ section[id]{scroll-margin-top:76px}
 .dust{position:absolute;inset:0;z-index:-2;pointer-events:none}
 .dust i{position:absolute;border-radius:50%;background:rgba(255,238,210,.85);box-shadow:0 0 6px rgba(255,230,190,.6);opacity:0;animation:dust linear infinite}
 @keyframes dust{0%{opacity:0;transform:translate(0,0)}15%{opacity:.9}85%{opacity:.5}100%{opacity:0;transform:translate(var(--dx,14px),-140px)}}
-.hero-scrim{position:absolute;inset:0;z-index:-1;background:radial-gradient(64% 42% at 50% 74%,rgba(11,10,9,.82),rgba(11,10,9,.35) 55%,transparent 75%),linear-gradient(180deg,transparent 72%,var(--stage) 100%)}
+.hero-scrim{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(6,5,4,.92) 0,rgba(6,5,4,.55) 70px,transparent 150px),radial-gradient(58% 34% at 50% 68%,rgba(8,7,6,.92),rgba(8,7,6,.6) 55%,transparent 82%),linear-gradient(180deg,transparent 30%,rgba(11,10,9,.5) 52%,rgba(11,10,9,.72) 78%,var(--stage) 100%),radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(0,0,0,.55) 100%)}
 .grain::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .hero-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;gap:28px}
 .hero-eb{flex-direction:column;gap:8px}
 .hero-eb span{white-space:nowrap}
 .hero-eb .star{display:none}
 @container site (min-width:600px){.hero-eb{flex-direction:row;gap:14px}.hero-eb .star{display:inline}}
-.hero h1{font-size:clamp(2.9rem,8.1cqi,7.3rem);line-height:.98;max-width:12ch}
+.hero h1{font-size:clamp(2.9rem,7.6cqi,6.9rem);line-height:1;max-width:12ch;color:#f7f1e6;font-weight:450;font-variation-settings:"opsz" 32;text-shadow:0 2px 2px rgba(0,0,0,.35),0 6px 48px rgba(0,0,0,.7)}
+.hero h1 em{text-shadow:none;filter:drop-shadow(0 4px 26px rgba(0,0,0,.65))}
+.hero .eyebrow{color:var(--gold-hi);text-shadow:0 2px 18px rgba(0,0,0,.9)}
+.hero .lede{color:rgba(239,231,218,.84);text-shadow:0 2px 20px rgba(0,0,0,.8)}
 .hero h1 .ln{display:inline}
 @container site (min-width:760px){.hero h1{max-width:none}.hero h1 .ln{display:block}}
 .hero .lede{max-width:33em}
@@ -124,7 +135,7 @@ section[id]{scroll-margin-top:76px}
 @container site (min-width:760px){.hero-meta .ig{display:inline-flex;align-items:center;gap:8px}}
 
 /* marquee */
-.marquee{border-block:1px solid var(--line);overflow:hidden;padding:22px 0;background:var(--stage)}
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding:22px 0;background:var(--stage);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
 .track{display:flex;width:max-content;animation:marquee 60s linear infinite}
 .track span{display:inline-flex;align-items:center;gap:28px;padding-right:28px;font-stretch:125%;font-weight:500;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--ivory-2);white-space:nowrap}
 @keyframes marquee{to{transform:translateX(-50%)}}
@@ -396,6 +407,7 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
 .pv-toggle[aria-pressed=true]{background:rgba(235,142,150,.12);color:#f3b8be!important}
 .pv-toggle[aria-pressed=true] .dot{background:rgba(235,142,150,.9);border-style:solid}
 @media (max-width:720px){.pv-brand,.pv-devices{display:none}}
+.no-pv .pv{display:none}
 
 /* ---------- component kit ---------- */
 .kit{min-height:100vh;padding:72px 0 140px;background:radial-gradient(60% 40% at 80% 0%,rgba(74,16,32,.35),transparent 70%),var(--stage)}
@@ -492,56 +504,71 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
 
   <section class="hero grain" id="top">
     <div class="hero-bg"></div>
-    <svg class="beams" id="beams" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <svg class="beams" id="beams" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
       <defs>
-        <linearGradient id="bL" gradientUnits="userSpaceOnUse" x1="640" y1="-80" x2="1163" y2="1000">
-          <stop offset="0" stop-color="#fff0d6" stop-opacity=".8"/>
-          <stop offset=".3" stop-color="#ffe2ba" stop-opacity=".4"/>
-          <stop offset=".62" stop-color="#f0c896" stop-opacity=".12"/>
-          <stop offset="1" stop-color="#f0c896" stop-opacity="0"/>
+        <linearGradient id="bL" gradientUnits="userSpaceOnUse" x1="680" y1="-80" x2="1198" y2="1000">
+          <stop offset="0" stop-color="#fff2dc" stop-opacity=".9"/>
+          <stop offset=".22" stop-color="#ffe4bf" stop-opacity=".5"/>
+          <stop offset=".36" stop-color="#f3cc9c" stop-opacity=".16"/>
+          <stop offset=".5" stop-color="#f0c896" stop-opacity=".04"/>
+          <stop offset=".62" stop-color="#f0c896" stop-opacity="0"/>
         </linearGradient>
-        <linearGradient id="bR" gradientUnits="userSpaceOnUse" x1="960" y1="-80" x2="437" y2="1000">
-          <stop offset="0" stop-color="#fff0d6" stop-opacity=".8"/>
-          <stop offset=".3" stop-color="#ffe2ba" stop-opacity=".4"/>
-          <stop offset=".62" stop-color="#f0c896" stop-opacity=".12"/>
-          <stop offset="1" stop-color="#f0c896" stop-opacity="0"/>
+        <linearGradient id="bR" gradientUnits="userSpaceOnUse" x1="920" y1="-80" x2="402" y2="1000">
+          <stop offset="0" stop-color="#fff2dc" stop-opacity=".9"/>
+          <stop offset=".22" stop-color="#ffe4bf" stop-opacity=".5"/>
+          <stop offset=".36" stop-color="#f3cc9c" stop-opacity=".16"/>
+          <stop offset=".5" stop-color="#f0c896" stop-opacity=".04"/>
+          <stop offset=".62" stop-color="#f0c896" stop-opacity="0"/>
         </linearGradient>
         <linearGradient id="bO" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#ffe7c4" stop-opacity=".35"/>
-          <stop offset="1" stop-color="#ffe7c4" stop-opacity="0"/>
+          <stop offset="0" stop-color="#ffe7c4" stop-opacity=".3"/>
+          <stop offset=".5" stop-color="#ffe7c4" stop-opacity=".04"/>
+          <stop offset=".6" stop-color="#ffe7c4" stop-opacity="0"/>
         </linearGradient>
         <radialGradient id="bloom">
-          <stop offset="0" stop-color="#fff3de" stop-opacity=".62"/>
-          <stop offset=".3" stop-color="#ffe2ba" stop-opacity=".2"/>
+          <stop offset="0" stop-color="#fff5e4" stop-opacity=".75"/>
+          <stop offset=".25" stop-color="#ffe2ba" stop-opacity=".22"/>
           <stop offset="1" stop-color="#ffe2ba" stop-opacity="0"/>
         </radialGradient>
-        <filter id="soft" x="-30%" y="-10%" width="160%" height="120%"><feGaussianBlur stdDeviation="7"/></filter>
-        <filter id="softer" x="-30%" y="-10%" width="160%" height="120%"><feGaussianBlur stdDeviation="26"/></filter>
+        <linearGradient id="flare" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#f6e3bd" stop-opacity="0"/>
+          <stop offset=".5" stop-color="#fff4e2" stop-opacity=".9"/>
+          <stop offset="1" stop-color="#f6e3bd" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="soft" x="-30%" y="-10%" width="160%" height="120%"><feGaussianBlur stdDeviation="6"/></filter>
+        <filter id="softer" x="-30%" y="-10%" width="160%" height="120%"><feGaussianBlur stdDeviation="24"/></filter>
+        <filter id="flareBlur" x="-10%" y="-400%" width="120%" height="900%"><feGaussianBlur stdDeviation="1.6 3"/></filter>
       </defs>
       <!-- ambient outer beams -->
-      <g opacity=".5">
-        <animateTransform attributeName="transform" type="rotate" values="-5 300 -80;4 300 -80;-5 300 -80" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="17s" repeatCount="indefinite"/>
-        <polygon points="294,-80 306,-80 640,1000 470,1000" fill="url(#bO)" filter="url(#softer)"/>
+      <g opacity=".55">
+        <animateTransform attributeName="transform" type="rotate" values="-5 260 -80;4 260 -80;-5 260 -80" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="17s" repeatCount="indefinite"/>
+        <polygon points="254,-80 266,-80 560,1000 390,1000" fill="url(#bO)" filter="url(#softer)"/>
       </g>
-      <g opacity=".5">
-        <animateTransform attributeName="transform" type="rotate" values="5 1300 -80;-4 1300 -80;5 1300 -80" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="15s" repeatCount="indefinite"/>
-        <polygon points="1294,-80 1306,-80 1130,1000 960,1000" fill="url(#bO)" filter="url(#softer)"/>
+      <g opacity=".55">
+        <animateTransform attributeName="transform" type="rotate" values="5 1340 -80;-4 1340 -80;5 1340 -80" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="15s" repeatCount="indefinite"/>
+        <polygon points="1334,-80 1346,-80 1210,1000 1040,1000" fill="url(#bO)" filter="url(#softer)"/>
       </g>
       <!-- the X -->
       <g>
-        <animateTransform attributeName="transform" type="rotate" values="-3 640 -80;3 640 -80;-3 640 -80" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="11s" repeatCount="indefinite"/>
-        <polygon points="628,-80 652,-80 1340,1000 990,1000" fill="url(#bL)" filter="url(#softer)" opacity=".55"/>
-        <polygon points="636,-80 644,-80 1228,1000 1098,1000" fill="url(#bL)" filter="url(#soft)"/>
+        <animateTransform attributeName="transform" type="rotate" values="-3 680 -80;3 680 -80;-3 680 -80" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="11s" repeatCount="indefinite"/>
+        <polygon points="668,-80 692,-80 1350,1000 1046,1000" fill="url(#bL)" filter="url(#softer)" opacity=".6"/>
+        <polygon points="676,-80 684,-80 1253,1000 1143,1000" fill="url(#bL)" filter="url(#soft)"/>
       </g>
       <g>
-        <animateTransform attributeName="transform" type="rotate" values="3 960 -80;-3 960 -80;3 960 -80" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="11s" repeatCount="indefinite"/>
-        <polygon points="972,-80 948,-80 260,1000 610,1000" fill="url(#bR)" filter="url(#softer)" opacity=".55"/>
-        <polygon points="964,-80 956,-80 372,1000 502,1000" fill="url(#bR)" filter="url(#soft)"/>
+        <animateTransform attributeName="transform" type="rotate" values="3 920 -80;-3 920 -80;3 920 -80" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="11s" repeatCount="indefinite"/>
+        <polygon points="932,-80 908,-80 250,1000 554,1000" fill="url(#bR)" filter="url(#softer)" opacity=".6"/>
+        <polygon points="924,-80 916,-80 347,1000 457,1000" fill="url(#bR)" filter="url(#soft)"/>
       </g>
-      <circle cx="800" cy="210" r="230" fill="url(#bloom)">
-        <animate attributeName="cy" values="210;299;210" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="11s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values=".75;1;.75" dur="5.5s" repeatCount="indefinite"/>
-      </circle>
+      <g>
+        <animateTransform attributeName="transform" type="translate" values="0 -31;0 38;0 -31" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="11s" repeatCount="indefinite"/>
+        <circle cx="800" cy="170" r="200" fill="url(#bloom)">
+          <animate attributeName="opacity" values=".8;1;.8" dur="5.5s" repeatCount="indefinite"/>
+        </circle>
+        <ellipse cx="800" cy="170" rx="360" ry="2.2" fill="url(#flare)" filter="url(#flareBlur)" opacity=".55">
+          <animate attributeName="opacity" values=".35;.6;.35" dur="5.5s" repeatCount="indefinite"/>
+        </ellipse>
+        <circle cx="800" cy="170" r="7" fill="#fffaf0" opacity=".9" filter="url(#soft)"/>
+      </g>
     </svg>
     <div class="dust" id="dust" aria-hidden="true"></div>
     <div class="hero-scrim"></div>
@@ -1029,9 +1056,9 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
   // hero dust
   if(!reduce){
     var dust=document.getElementById('dust');
-    for(var d=0;d<26;d++){
+    for(var d=0;d<18;d++){
       var p=document.createElement('i'), s=(Math.random()*1.8+.8).toFixed(2);
-      p.style.cssText='left:'+(30+Math.random()*40)+'%;top:'+(18+Math.random()*70)+'%;width:'+s+'px;height:'+s+'px;animation-duration:'+(9+Math.random()*10).toFixed(1)+'s;animation-delay:-'+(Math.random()*14).toFixed(1)+'s;--dx:'+((Math.random()*40)-20).toFixed(0)+'px';
+      p.style.cssText='left:'+(34+Math.random()*32)+'%;top:'+(8+Math.random()*34)+'%;width:'+s+'px;height:'+s+'px;animation-duration:'+(9+Math.random()*10).toFixed(1)+'s;animation-delay:-'+(Math.random()*14).toFixed(1)+'s;--dx:'+((Math.random()*40)-20).toFixed(0)+'px';
       dust.appendChild(p);
     }
   } else {
