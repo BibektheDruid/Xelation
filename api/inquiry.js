@@ -4,34 +4,49 @@
 
 const EVENT_TYPES = { wedding: 'Wedding', party: 'Private party', other: 'Other' };
 const PACKAGES = { essential: 'Essential', signature: 'Signature', luxury: 'Luxury', unsure: 'Not sure yet', custom: 'Custom quote' };
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+// Same pattern as the form in index.html. Excludes characters Resend refuses in an address,
+// consecutive dots and a trailing dot, so a lead never fails on its Reply-To.
+const EMAIL_RE = /^(?!.*\.\.)[^\s@<>,;:"()[\]\\]+@[^\s@<>,;:"()[\]\\.][^\s@<>,;:"()[\]\\]*\.[A-Za-z]{2,}$/;
+const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 function str(v, max) {
   return typeof v === 'string' ? v.trim().slice(0, max) : '';
 }
 
+// A real calendar date (rejects 2026-02-31) that hasn't passed. "Today" allows a day of slack for time zones.
+function dateError(s) {
+  const m = DATE_RE.exec(s);
+  if (!m) return 'Pick a date, or tick "no date yet".';
+  const t = Date.UTC(+m[1], +m[2] - 1, +m[3]);
+  const back = new Date(t);
+  if (back.getUTCFullYear() !== +m[1] || back.getUTCMonth() !== +m[2] - 1 || back.getUTCDate() !== +m[3]) return 'Pick a date, or tick "no date yet".';
+  if (t < Date.now() - 2 * 864e5) return "Pick a date that hasn't passed yet.";
+  return '';
+}
+
 function validate(body) {
+  const rawEmail = typeof body.email === 'string' ? body.email.trim() : '';
   const d = {
     name: str(body.name, 200),
-    email: str(body.email, 254),
+    email: rawEmail,
     phone: str(body.phone, 40),
     date: str(body.date, 10),
     noDate: body.noDate === true,
     eventType: str(body.eventType, 20) || 'wedding',
     venue: str(body.venue, 200),
-    guests: str(String(body.guests == null ? '' : body.guests), 6),
+    guests: str(String(body.guests == null ? '' : body.guests), 20),
     package: str(body.package, 20),
     message: str(body.message, 2000),
-    company: str(body.company, 200),
+    hp: str(body.hp, 200),
   };
+  // Guests is optional: a value that isn't a sensible whole number is dropped rather than failing the lead.
+  if (!/^\d{1,5}$/.test(d.guests) || +d.guests < 1) d.guests = '';
   const errors = {};
   if (!d.name) errors.name = "Tell us who we're celebrating.";
-  if (!EMAIL_RE.test(d.email)) errors.email = 'Enter a valid email so we can reply.';
-  if (!d.noDate && !(DATE_RE.test(d.date) && !isNaN(Date.parse(d.date)))) errors.date = 'Pick a date, or tick "no date yet".';
+  if (rawEmail.length > 254 || !EMAIL_RE.test(rawEmail)) errors.email = 'Enter a valid email so we can reply.';
+  if (!d.noDate) { const e = dateError(d.date); if (e) errors.date = e; }
   if (!EVENT_TYPES[d.eventType]) errors.eventType = 'Choose an event type.';
   if (d.package && !PACKAGES[d.package]) errors.package = 'Choose a package.';
-  if (d.guests && !/^\d{1,5}$/.test(d.guests)) errors.guests = 'Enter a number of guests.';
   return { data: d, errors };
 }
 
@@ -77,7 +92,12 @@ async function sendEmail(payload) {
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
-  if (!r.ok) throw new Error(`Resend ${r.status}: ${await r.text()}`);
+  if (!r.ok) {
+    // Log only the status and Resend's error name: its message can repeat the visitor's address.
+    let name = '';
+    try { name = (await r.json()).name || ''; } catch {}
+    throw new Error(`Resend ${r.status}${name ? ' ' + name : ''}`);
+  }
 }
 
 module.exports = async function handler(req, res) {
@@ -86,17 +106,21 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ ok: false });
   }
 
-  let body = req.body;
-  if (typeof body === 'string') {
-    try { body = JSON.parse(body); } catch { body = null; }
+  // JSON only: a plain-text or form post (which other sites can send without a CORS check) is refused.
+  if (!String(req.headers['content-type'] || '').toLowerCase().startsWith('application/json')) {
+    return res.status(415).json({ ok: false });
   }
-  if (!body || typeof body !== 'object') return res.status(400).json({ ok: false, errors: {} });
+  const body = req.body;
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return res.status(400).json({ ok: false, errors: {} });
 
   const { data, errors } = validate(body);
   if (Object.keys(errors).length) return res.status(400).json({ ok: false, errors });
 
-  // Spam trap: bots fill in the hidden "company" field. Pretend it worked and send nothing.
-  if (data.company) return res.status(200).json({ ok: true });
+  // Spam trap: bots fill in the hidden "hp" field. Pretend it worked and send nothing.
+  if (data.hp) {
+    console.warn('Inquiry dropped: spam trap field was filled.');
+    return res.status(200).json({ ok: true });
+  }
 
   const { RESEND_API_KEY, INQUIRY_TO_EMAIL, INQUIRY_FROM_EMAIL } = process.env;
   if (!RESEND_API_KEY || !INQUIRY_TO_EMAIL || !INQUIRY_FROM_EMAIL) {
@@ -108,15 +132,16 @@ module.exports = async function handler(req, res) {
     const { subject, text, html } = buildEmail(data);
     await sendEmail({ from: INQUIRY_FROM_EMAIL, to: [INQUIRY_TO_EMAIL], reply_to: data.email, subject, text, html });
 
+    // Fixed wording with nothing the visitor typed, so the form can't be used to mail arbitrary text to strangers.
+    // Turn this on only once the domain is verified and the endpoint is rate limited.
     if (process.env.SEND_CONFIRMATION_EMAIL === 'true') {
-      const first = data.name.split(/\s|&/)[0];
       await sendEmail({
         from: INQUIRY_FROM_EMAIL,
         to: [data.email],
         reply_to: INQUIRY_TO_EMAIL,
         subject: 'We got your inquiry · XELATION',
-        text: `Thank you, ${first}. We've got your inquiry and will be in touch shortly.\n\nXELATION`,
-        html: `<div style="font-family:Helvetica,Arial,sans-serif;color:#1a1309"><p>Thank you, ${esc(first)}.</p><p>We've got your inquiry and will be in touch shortly.</p><p>XELATION</p></div>`,
+        text: "Thank you. We've got your inquiry and will be in touch shortly.\n\nXELATION",
+        html: '<div style="font-family:Helvetica,Arial,sans-serif;color:#1a1309"><p>Thank you.</p><p>We\'ve got your inquiry and will be in touch shortly.</p><p>XELATION</p></div>',
       }).catch((err) => console.error('Confirmation email failed:', err.message));
     }
 

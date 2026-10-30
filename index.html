@@ -849,11 +849,11 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
       <div class="form-card reveal" id="formCard" style="--d:.15s">
         <form class="form" id="inqForm" novalidate>
           <div class="row2">
-            <div class="field" data-f="name"><label class="lbl" for="f-name">Your name <span class="req">*</span></label><input class="input" id="f-name" name="name" autocomplete="name" placeholder="Alex &amp; Jordan"><span class="msg" aria-live="polite"></span></div>
-            <div class="field" data-f="email"><label class="lbl" for="f-email">Email <span class="req">*</span></label><input class="input" id="f-email" name="email" type="email" autocomplete="email" placeholder="you@email.com"><span class="msg" aria-live="polite"></span></div>
+            <div class="field" data-f="name"><label class="lbl" for="f-name">Your name <span class="req">*</span></label><input class="input" id="f-name" name="name" autocomplete="name" maxlength="200" placeholder="Alex &amp; Jordan"><span class="msg" aria-live="polite"></span></div>
+            <div class="field" data-f="email"><label class="lbl" for="f-email">Email <span class="req">*</span></label><input class="input" id="f-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@email.com"><span class="msg" aria-live="polite"></span></div>
           </div>
           <div class="row2">
-            <div class="field"><label class="lbl" for="f-phone">Phone</label><input class="input" id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="(555) 123-4567"></div>
+            <div class="field"><label class="lbl" for="f-phone">Phone</label><input class="input" id="f-phone" name="phone" type="tel" autocomplete="tel" maxlength="40" placeholder="(555) 123-4567"></div>
             <div class="field" data-f="date"><label class="lbl" for="f-date">Event date <span class="req">*</span></label><input class="input" id="f-date" name="date" type="date"><label class="check"><input type="checkbox" id="f-nodate"> We haven't set a date yet</label><span class="msg" aria-live="polite"></span></div>
           </div>
           <div class="field"><span class="lbl" id="lbl-type">Event type</span>
@@ -864,8 +864,8 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
             </div>
           </div>
           <div class="row2">
-            <div class="field"><label class="lbl" for="f-venue">Venue or city</label><input class="input" id="f-venue" name="venue" placeholder="Where's the party?"></div>
-            <div class="field"><label class="lbl" for="f-guests">Estimated guests</label><input class="input" id="f-guests" name="guests" type="number" min="1" inputmode="numeric" placeholder="150"></div>
+            <div class="field"><label class="lbl" for="f-venue">Venue or city</label><input class="input" id="f-venue" name="venue" maxlength="200" placeholder="Where's the party?"></div>
+            <div class="field" data-f="guests"><label class="lbl" for="f-guests">Estimated guests</label><input class="input" id="f-guests" name="guests" type="number" min="1" max="99999" step="1" inputmode="numeric" placeholder="150"><span class="msg" aria-live="polite"></span></div>
           </div>
           <div class="field"><span class="lbl" id="lbl-pkg">Package</span>
             <div class="chips" role="group" aria-labelledby="lbl-pkg" id="f-pkg" data-single>
@@ -877,7 +877,7 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
             </div>
           </div>
           <div class="field"><label class="lbl" for="f-msg">Anything else?</label><textarea class="input" id="f-msg" name="message" maxlength="2000" placeholder="Your vibe, must-plays, the moment you can't wait for…"></textarea></div>
-          <div class="hp" aria-hidden="true"><label for="f-company">Company</label><input id="f-company" name="company" tabindex="-1" autocomplete="off"></div>
+          <div class="hp" aria-hidden="true"><label for="f-hp">Leave this empty</label><input id="f-hp" name="hp" tabindex="-1" autocomplete="off"></div>
           <p class="form-err" id="formErr" role="alert" hidden>That didn't go through. Your details are still here, so please try again, or DM <a href="https://instagram.com/its_xelation" target="_blank" rel="noopener">@its_xelation</a> on Instagram.</p>
           <button class="btn btn-gold submit" type="submit"><span class="t">Check availability</span><svg class="ic"><use href="#i-arrow"/></svg><span class="spin" aria-hidden="true"></span></button>
           <p class="fine">Your details go straight to XELATION. No spam, ever.</p>
@@ -1106,14 +1106,27 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
   function check(f){
     var v;
     if(f==='name'){v=form.name.value.trim();setErr('name',v?'':'Tell us who we\'re celebrating.');return!!v}
-    if(f==='email'){v=form.email.value.trim();var ok=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);setErr('email',ok?'':(v?'Enter a valid email so we can reply.':'We need an email to reply.'));return ok}
-    if(f==='date'){var ok2=nodate.checked||!!date.value;setErr('date',ok2?'':'Pick a date, or tick "no date yet".');return ok2}
+    // same email pattern as api/inquiry.js
+    if(f==='email'){v=form.email.value.trim();var ok=/^(?!.*\.\.)[^\s@<>,;:"()[\]\\]+@[^\s@<>,;:"()[\]\\.][^\s@<>,;:"()[\]\\]*\.[A-Za-z]{2,}$/.test(v);setErr('email',ok?'':(v?'Enter a valid email so we can reply.':'We need an email to reply.'));return ok}
+    if(f==='date'){
+      if(nodate.checked){setErr('date','');return true}
+      var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(date.value);
+      if(!m){setErr('date','Pick a date, or tick "no date yet".');return false}
+      var today=new Date();today.setHours(0,0,0,0);
+      var past=new Date(+m[1],+m[2]-1,+m[3])<today;
+      setErr('date',past?'Pick a date that hasn\'t passed yet.':'');return!past
+    }
+    if(f==='guests'){
+      var g=form.guests;v=g.value.trim();
+      var ok3=!g.validity.badInput&&(!v||(/^\d{1,5}$/.test(v)&&+v>=1));
+      setErr('guests',ok3?'':'Enter a whole number of guests, or leave it blank.');return ok3
+    }
   }
-  ['name','email'].forEach(function(f){form[f].addEventListener('blur',function(){if(form[f].value)check(f)})});
+  ['name','email','guests'].forEach(function(f){form[f].addEventListener('blur',function(){if(form[f].value||f==='guests')check(f)})});
   date.addEventListener('change',function(){check('date')});
   form.addEventListener('submit',function(e){
     e.preventDefault();
-    var fields=['name','email','date'], bad=fields.filter(function(f){return!check(f)});
+    var fields=['name','email','date','guests'], bad=fields.filter(function(f){return!check(f)});
     if(bad.length){var first=bad[0]==='date'?date:form[bad[0]];first.focus();return}
     var btn=form.querySelector('.submit');btn.classList.add('loading');btn.disabled=true;formErr.hidden=true;
     function done(){
@@ -1135,7 +1148,7 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
     if(!document.documentElement.classList.contains('no-pv')){setTimeout(done,1300);return}
     function picked(id){var b=document.querySelector('#'+id+' [aria-pressed="true"]');return b?b.dataset.v:''}
     var payload={name:form.name.value,email:form.email.value,phone:form.phone.value,date:nodate.checked?'':date.value,noDate:nodate.checked,
-      eventType:picked('f-type')||'wedding',venue:form.venue.value,guests:form.guests.value,package:picked('f-pkg'),message:form.message.value,company:form.company.value};
+      eventType:picked('f-type')||'wedding',venue:form.venue.value,guests:form.guests.value,package:picked('f-pkg'),message:form.message.value,hp:form.hp.value};
     fetch('/api/inquiry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
       .then(function(r){return r.json().catch(function(){return{ok:false}})})
       .then(function(j){if(j&&j.ok)done();else fail(j&&j.errors)})

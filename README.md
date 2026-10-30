@@ -24,7 +24,9 @@ The form in review mode is simulated: it checks the fields and shows the confirm
 
 ## Inquiry form
 
-On the live site the form posts to `/api/inquiry`, which emails the lead to `INQUIRY_TO_EMAIL` with the visitor as Reply-To. Bots that fill the hidden `company` field get a fake success and nothing is sent.
+On the live site the form posts to `/api/inquiry`, which emails the lead to `INQUIRY_TO_EMAIL` with the visitor as Reply-To. Bots that fill the hidden `hp` field get a fake success and nothing is sent (logged as "spam trap"). The endpoint accepts JSON only.
+
+**Before going public, add a rate limit:** Vercel > Project > Firewall > add a Rate Limit rule for path `/api/inquiry` (for example 5 requests per 60 seconds per IP). Without it, a script can flood the inbox and use up Resend's daily quota. Turn on `SEND_CONFIRMATION_EMAIL` only after that and after the domain is verified.
 
 Set these in Vercel (Project Settings > Environment Variables), then redeploy:
 
