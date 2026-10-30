@@ -357,6 +357,8 @@ textarea.input{height:auto;min-height:118px;padding:14px 16px;resize:vertical;li
 .submit.loading .spin{display:block}.submit.loading .t,.submit.loading .ic{display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 .fine{margin:0;text-align:center;font-size:12.5px;color:var(--ivory-3)}
+.form-err{margin:0;padding:12px 16px;border-radius:14px;border:1px solid rgba(227,123,132,.45);background:rgba(227,123,132,.08);font-size:13.5px;line-height:1.5;color:var(--ivory-2)}
+.form-err a{color:var(--gold-hi);border-bottom:1px solid rgba(214,176,122,.4)}
 .done{display:none;text-align:center;padding:34px 8px 20px}
 .form-card.sent .form{display:none}.form-card.sent .done{display:block;animation:fadeDown .7s var(--ease)}
 .done svg{width:84px;height:84px;margin:0 auto 26px;display:block}
@@ -876,6 +878,7 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
           </div>
           <div class="field"><label class="lbl" for="f-msg">Anything else?</label><textarea class="input" id="f-msg" name="message" maxlength="2000" placeholder="Your vibe, must-plays, the moment you can't wait for…"></textarea></div>
           <div class="hp" aria-hidden="true"><label for="f-company">Company</label><input id="f-company" name="company" tabindex="-1" autocomplete="off"></div>
+          <p class="form-err" id="formErr" role="alert" hidden>That didn't go through. Your details are still here, so please try again, or DM <a href="https://instagram.com/its_xelation" target="_blank" rel="noopener">@its_xelation</a> on Instagram.</p>
           <button class="btn btn-gold submit" type="submit"><span class="t">Check availability</span><svg class="ic"><use href="#i-arrow"/></svg><span class="spin" aria-hidden="true"></span></button>
           <p class="fine">Your details go straight to XELATION. No spam, ever.</p>
         </form>
@@ -1097,7 +1100,7 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
 
   // form
   var form=document.getElementById('inqForm'), card=document.getElementById('formCard'),
-      nodate=document.getElementById('f-nodate'), date=document.getElementById('f-date');
+      nodate=document.getElementById('f-nodate'), date=document.getElementById('f-date'), formErr=document.getElementById('formErr');
   nodate.addEventListener('change',function(){date.disabled=nodate.checked;if(nodate.checked)setErr('date','')});
   function setErr(f,m){var el=form.querySelector('[data-f="'+f+'"]');if(!el)return;el.classList.toggle('err',!!m);el.querySelector('.msg').textContent=m}
   function check(f){
@@ -1112,8 +1115,8 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
     e.preventDefault();
     var fields=['name','email','date'], bad=fields.filter(function(f){return!check(f)});
     if(bad.length){var first=bad[0]==='date'?date:form[bad[0]];first.focus();return}
-    var btn=form.querySelector('.submit');btn.classList.add('loading');btn.disabled=true;
-    setTimeout(function(){
+    var btn=form.querySelector('.submit');btn.classList.add('loading');btn.disabled=true;formErr.hidden=true;
+    function done(){
       btn.classList.remove('loading');btn.disabled=false;
       var first=form.name.value.trim().split(/\s|&/)[0];
       var when='your date';
@@ -1121,9 +1124,24 @@ body.show-drafts .draft{outline:1px dashed rgba(235,142,150,.85);outline-offset:
       document.getElementById('doneTitle').textContent='Thank you, '+first+'.';
       document.getElementById('doneText').textContent=nodate.checked?'We\'ve got your inquiry. We\'ll be in touch to talk through your plans.':'We\'ve got your inquiry and will confirm availability for '+when+'.';
       card.classList.add('sent');
-    },1300);
+    }
+    function fail(errors){
+      btn.classList.remove('loading');btn.disabled=false;
+      var keys=Object.keys(errors||{}).filter(function(f){return form.querySelector('[data-f="'+f+'"]')});
+      keys.forEach(function(f){setErr(f,errors[f])});
+      if(keys.length){(keys[0]==='date'?date:form[keys[0]]).focus()}else{formErr.hidden=false}
+    }
+    // review mode (?preview) stays simulated so reviewers never send real emails
+    if(!document.documentElement.classList.contains('no-pv')){setTimeout(done,1300);return}
+    function picked(id){var b=document.querySelector('#'+id+' [aria-pressed="true"]');return b?b.dataset.v:''}
+    var payload={name:form.name.value,email:form.email.value,phone:form.phone.value,date:nodate.checked?'':date.value,noDate:nodate.checked,
+      eventType:picked('f-type')||'wedding',venue:form.venue.value,guests:form.guests.value,package:picked('f-pkg'),message:form.message.value,company:form.company.value};
+    fetch('/api/inquiry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      .then(function(r){return r.json().catch(function(){return{ok:false}})})
+      .then(function(j){if(j&&j.ok)done();else fail(j&&j.errors)})
+      .catch(function(){fail()});
   });
-  document.getElementById('again').addEventListener('click',function(){form.reset();date.disabled=false;setGroup('f-type','wedding');setGroup('f-pkg','');card.classList.remove('sent')});
+  document.getElementById('again').addEventListener('click',function(){form.reset();date.disabled=false;formErr.hidden=true;setGroup('f-type','wedding');setGroup('f-pkg','');card.classList.remove('sent')});
 
   // preview controls
   document.getElementById('pvView').addEventListener('click',function(e){
