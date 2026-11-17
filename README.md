@@ -7,6 +7,7 @@ Website for **XELATION**: wedding DJ & MC, private parties. [@its_xelation](http
 | Path | What it is |
 |---|---|
 | [`index.html`](index.html) | The site: a self-contained page with the full layout and the inquiry form. Deployed at [xelation.vercel.app](https://xelation.vercel.app). |
+| [`images/gallery/`](images/gallery/) | Gallery photos from Xelation's events, in wedding-day order (`01`–`15`). Each has a `-640` grid size and a `-1200` size for the full-screen viewer. Cropped from his phone screenshots, colour-converted to sRGB, metadata (including GPS) stripped. |
 | [`api/inquiry.js`](api/inquiry.js) | Vercel serverless function behind the form. Checks the fields and emails each lead through Resend. |
 | [`.env.example`](.env.example) | The environment variables the form needs. |
 | [`docs/xelation-site-build-prompt.md`](docs/xelation-site-build-prompt.md) | The build brief: stack, design direction, page structure, package copy (word for word), inquiry form + Resend spec, and open items. |

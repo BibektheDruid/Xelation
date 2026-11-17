@@ -72,7 +72,7 @@ One page with anchored sections, in this order:
 5. **Optional enhancements.** The four add-ons in a slim band. `[NEEDS DJ INPUT: are these add-ons for Luxury only, or for every tier? The source lists them under Luxury.]`
 6. **How it works.** Four steps: Inquire with your date → Consultation call → Plan your music and timeline → Enjoy the night. `[NEEDS DJ INPUT: does this match how he actually works?]`
 7. **Private parties.** A short block: "Not a wedding? Private parties get a custom quote." Button **"Request a quote"** goes to the form with Event type set to *Private party* and Package set to *Custom quote*.
-8. **Gallery.** A grid of 6 photo slots filled from the content file, ending with a "See more on Instagram" link. Until real photos arrive, show designed placeholders (light-beam gradients). Never show stock or AI-generated photos as if they were his events.
+8. **Gallery.** His real event photos (15 so far, in `images/gallery/`), in wedding-day order from ceremony to last call, each with a short caption naming the moment, plus a "Follow on Instagram" link. Tapping a photo opens a full-screen viewer with previous/next, swipe and keyboard controls. Photo paths and captions come from the content file. Never show stock or AI-generated photos as if they were his events.
 9. **Testimonials.** Show this section only if the content file has real testimonials. If it's empty, leave the section out entirely.
 10. **FAQ.** A shadcn Accordion. Include only questions the source content can answer:
     - *What's the difference between the packages?* Essential covers music and sound. Signature is the full DJ & MC day, up to 8 hours. Luxury is up to 10 hours with premium sound and lighting.
@@ -248,7 +248,7 @@ List these in `.env.example` and explain them in the README:
 5. Service area (city or region) and whether he travels
 6. Inquiry email address and domain name
 7. Types of private parties he takes
-8. Photos and video (his own), plus a logo if he has one; otherwise we use the wordmark
+8. Video (his own) and a logo if he has one; otherwise we use the wordmark. Photos received: 15, in the gallery (14 are stills from his phone videos, so original clips or photos would look sharper)
 9. Real testimonials, if he has any
 10. Policies for the FAQ: deposit, how far ahead to book, travel fees
 11. Usual response time for inquiries
